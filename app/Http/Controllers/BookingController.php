@@ -37,7 +37,7 @@ class BookingController extends Controller
      */
     public function create()
     {
-        //
+        return view('bookings.create');
     }
 
     /**
@@ -48,7 +48,28 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'guest_full_name' => 'required|string|min:3',
+            'guest_credit_card' => 'required|digits:16',
+            'room' => 'required|integer',
+            'from_date' => 'required|string',
+            'to_date' => 'required|string',
+            'more_details' => 'required|string'
+        ]);
+
+        $booking = new Booking;
+
+        $booking->guest_full_name = $request->guest_full_name;
+        $booking->guest_credit_card = $request->guest_credit_card;
+        $booking->room = $request->room;
+        $booking->from_date = $request->from_date;
+        $booking->to_date = $request->to_date;
+        $booking->more_details = $request->more_details;
+
+        $booking->save();
+
+        return view('booking.store');
+
     }
 
     /**
@@ -69,9 +90,9 @@ class BookingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($booking)
     {
-        //
+        return view('booking.edit', compact('booking'));
     }
 
     /**
@@ -83,7 +104,32 @@ class BookingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'guest_full_name' => 'required|string|min:3',
+            'guest_credit_card' => 'required|digits:16',
+            'room' => 'required|integer',
+            'from_date' => 'required|string',
+            'to_date' => 'required|string',
+            'more_details' => 'required|string'
+        ]);
+            
+            
+        $booking = Booking::find($id);
+
+        $data = [
+            'guest_full_name' => $request->guest_full_name,
+            'guest_credit_card' => $request->guest_credit_card,
+            'room' => $request->room,
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'more_details' => $request->more_details
+        ];
+
+
+        $booking->update($data);
+
+
+        return view('booking.show', compact('booking'));
     }
 
     /**
@@ -94,6 +140,6 @@ class BookingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return view('booking.destroy');
     }
 }
